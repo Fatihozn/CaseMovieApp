@@ -11,7 +11,8 @@ import SwiftUI
 struct CaseMovieAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginView()
+                .accentColor(.clrAccent)
         }
     }
 }
