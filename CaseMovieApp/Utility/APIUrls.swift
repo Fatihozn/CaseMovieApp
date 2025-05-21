@@ -45,7 +45,7 @@ enum APIUrls {
     }
     
     var fullURL: String {
-        return Secrets.baseURL.rawValue + path
+        return "https://moviatask.cerasus.app" + path
     }
     
     
