@@ -10,7 +10,7 @@ import Foundation
 final class AuthService {
     static let shared = AuthService()
     
-    func login(request: LoginRequest) async -> Result<AuthResponse, Error> {
+    func login(request: LoginRequestBody) async -> Result<AuthResponse, Error> {
         do {
             let response = try await NetworkManager.shared.createRequest(
                 with: .postLogin,
@@ -25,7 +25,7 @@ final class AuthService {
         }
     }
     
-    func signup(request: RegisterRequest) async -> Result<AuthResponse, Error> {
+    func signup(request: RegisterRequestBody) async -> Result<AuthResponse, Error> {
         do {
             let response = try await NetworkManager.shared.createRequest(
                 with: .postRegister,
@@ -40,13 +40,13 @@ final class AuthService {
         }
     }
     
-    func getCurrentUser(token: String) async -> Result<CurrentUser, Error> {
+    func getCurrentUser(token: String) async -> Result<CurrentUserResponse, Error> {
         do {
             let response = try await NetworkManager.shared.createRequest(
                 with: .getCurrentUser,
                 method: .GET,
                 token: token,
-                responseType: CurrentUser.self
+                responseType: CurrentUserResponse.self
             )
             
             return .success(response)

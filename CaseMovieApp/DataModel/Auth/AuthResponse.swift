@@ -10,12 +10,6 @@ import Foundation
 struct AuthResponse: Codable {
     var message: String
     var token: String?
-    var user: User?
+    var user: UserResponse?
 }
 
-struct User: Codable {
-    var id: String
-    var name: String
-    var surname: String
-    var email: String
-}

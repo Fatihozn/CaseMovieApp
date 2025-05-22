@@ -11,11 +11,11 @@ import SwiftUI
 final class HomeViewModel: ObservableObject {
     @Published var likedMovies: [Movie] = []
     @Published var recommendedMovies: [Movie] = []
-    
+    @Published var likedIds = Set<Int>()
     
     func fetchMovies(token: String) async {
         await fetcLikedMovies(token: token)
-        let likedIds = Set(likedMovies.map { $0.id })
+        likedIds = Set(likedMovies.map { $0.id })
         
         let response = await MovieService.shared.fetchMovies()
         switch response {
@@ -35,4 +35,5 @@ final class HomeViewModel: ObservableObject {
             print("❌ Error: \(error.localizedDescription)")
         }
     }
+    
 }

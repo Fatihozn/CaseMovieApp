@@ -1,5 +1,5 @@
 //
-//  RegisterRequest.swift
+//  LoginRequest.swift
 //  CaseMovieApp
 //
 //  Created by Fatih Özen on 21.05.2025.
@@ -7,9 +7,7 @@
 
 import Foundation
 
-struct RegisterRequest: Codable {
-    var name: String
-    var surname: String
+struct LoginRequestBody: Codable {
     var email: String
     var password: String
 }

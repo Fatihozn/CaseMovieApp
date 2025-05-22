@@ -38,4 +38,33 @@ final class MovieService {
             return .failure(error)
         }
     }
+    
+    func likeMovie(id: Int, token: String) async -> Result<LikeUnLikeResponse, Error> {
+        do {
+            let response = try await NetworkManager.shared.createRequest(
+                with: .postLikeMovie(id: id),
+                method: .POST,
+                token: token,
+                responseType: LikeUnLikeResponse.self)
+            
+            return .success(response)
+        } catch {
+            return .failure(error)
+        }
+    }
+    
+    func unLikeMovie(id: Int, token: String) async -> Result<LikeUnLikeResponse, Error> {
+        do {
+            let response = try await NetworkManager.shared.createRequest(
+                with: .postUnlikeMovie(id: id),
+                method: .POST,
+                token: token,
+                responseType: LikeUnLikeResponse.self)
+            
+            return .success(response)
+        } catch {
+            return .failure(error)
+        }
+    }
+    
 }

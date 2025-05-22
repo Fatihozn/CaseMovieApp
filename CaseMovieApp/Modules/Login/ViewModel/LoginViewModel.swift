@@ -21,7 +21,7 @@ final class LoginViewModel: ObservableObject {
     }
 
     func login() async -> String? {
-        let request = LoginRequest(email: email, password: password)
+        let request = LoginRequestBody(email: email, password: password)
         let response = await AuthService.shared.login(request: request)
         switch response {
         case .success(let response):

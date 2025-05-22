@@ -29,7 +29,6 @@ final class NetworkManager {
 
         if let token {
             urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            
         }
         
         if let body {

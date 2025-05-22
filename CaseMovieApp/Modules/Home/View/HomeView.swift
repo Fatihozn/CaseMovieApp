@@ -29,7 +29,7 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHGrid(rows: [GridItem(.fixed(150))], spacing: 12) {
                                     ForEach(viewModel.likedMovies) { movie in
-                                        NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                        NavigationLink(destination: MovieDetailView(movie: movie, likedMovies: viewModel.likedIds)) {
                                             MovieItemView(movie: movie, isFullWidth: false)
                                         }
                                     }
@@ -47,7 +47,7 @@ struct HomeView: View {
                             
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                                 ForEach(viewModel.recommendedMovies) { movie in
-                                    NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                    NavigationLink(destination: MovieDetailView(movie: movie, likedMovies: viewModel.likedIds)) {
                                         MovieItemView(movie: movie, isFullWidth: true)
                                     }
                                 }

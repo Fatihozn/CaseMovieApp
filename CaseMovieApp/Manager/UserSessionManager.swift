@@ -10,7 +10,7 @@ import SwiftUI
 final class UserSessionManager: ObservableObject {
     @AppStorage("authToken") private var token: String?
     
-    @Published var currentUser: CurrentUser?
+    @Published var currentUser: CurrentUserResponse?
     @Published var isLoggedIn: Bool = false
 
     init() {

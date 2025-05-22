@@ -24,7 +24,7 @@ final class SignUpViewModel: ObservableObject {
     }
 
     func signUp() async -> String? {
-        let request = RegisterRequest(name: name, surname: surname, email: email, password: password)
+        let request = RegisterRequestBody(name: name, surname: surname, email: email, password: password)
         let response = await AuthService.shared.signup(request: request)
         switch response {
         case .success(let response):
