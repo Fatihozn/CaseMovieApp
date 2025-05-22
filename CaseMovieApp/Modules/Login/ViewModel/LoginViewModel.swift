@@ -11,6 +11,7 @@ import Foundation
 final class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
+    @Published var errorMessage: String?
 
     var isFormValid: Bool {
         !email.isEmpty &&
@@ -19,15 +20,19 @@ final class LoginViewModel: ObservableObject {
         password.count >= 6
     }
 
-    func login() async {
+    func login() async -> String? {
         let request = LoginRequest(email: email, password: password)
         let response = await AuthService.shared.login(request: request)
         switch response {
         case .success(let response):
-            print(response)
+            if let token = response.token {
+                print("token: \(token)")
+                return token
+            }
         case .failure(let error):
-            print(error.localizedDescription)
+            errorMessage = error.localizedDescription
+            print("❌ Error: \(error.localizedDescription)")
         }
-        print("login response geldi")
+        return nil
     }
 }

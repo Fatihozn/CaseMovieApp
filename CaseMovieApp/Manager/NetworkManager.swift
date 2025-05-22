@@ -11,10 +11,11 @@ final class NetworkManager {
     static let shared = NetworkManager()
     private init() {}
 
-    func createRequest<T: Codable, U: Codable>(
+    func createRequest<U: Codable>(
         with url: APIUrls,
         method: HttpMethods,
-        body: T? = nil,
+        token: String? = nil,
+        body: Codable? = nil,
         responseType: U.Type
     ) async throws -> U {
         
@@ -24,9 +25,15 @@ final class NetworkManager {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
 
-        if let body = body {
+        if let token {
+            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            
+        }
+        
+        if let body {
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = try JSONEncoder().encode(body)
         }
 

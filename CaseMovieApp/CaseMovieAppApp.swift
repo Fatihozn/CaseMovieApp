@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct CaseMovieAppApp: App {
+    @StateObject private var sessionManager = UserSessionManager()
+    
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            RooterView()
+                .environmentObject(sessionManager)
                 .accentColor(.clrAccent)
         }
     }

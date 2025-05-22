@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct SignUpView: View {
+    @EnvironmentObject var sessionManager: UserSessionManager
     @StateObject private var viewModel = SignUpViewModel()
     
     var body: some View {
@@ -42,7 +43,9 @@ struct SignUpView: View {
                     
                     Button(action: {
                         Task {
-                            await viewModel.signUp()
+                            if let token = await viewModel.signUp() {
+                                sessionManager.setToken(token)
+                            }
                         }
                     }) {
                         Text("Sign Up")
@@ -55,7 +58,19 @@ struct SignUpView: View {
                     .disabled(!viewModel.isFormValid)
                 }
                 .padding()
+                .alert(isPresented: Binding<Bool>(
+                    get: { viewModel.errorMessage != nil },
+                    set: { newValue in if !newValue { viewModel.errorMessage = nil } }
+                )) {
+                    Alert(
+                        title: Text("Hata"),
+                        message: Text(viewModel.errorMessage ?? "Bilinmeyen hata"),
+                        dismissButton: .default(Text("Tamam"))
+                    )
+                }
             }
         }
     }
 }
+
+#warning("buradaki alert test edilecek")

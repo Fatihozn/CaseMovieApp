@@ -13,6 +13,7 @@ final class SignUpViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var confirmPassword = ""
+    @Published var errorMessage: String?
 
     var isFormValid: Bool {
         !name.isEmpty &&
@@ -22,15 +23,19 @@ final class SignUpViewModel: ObservableObject {
         password == confirmPassword
     }
 
-    func signUp() async {
+    func signUp() async -> String? {
         let request = RegisterRequest(name: name, surname: surname, email: email, password: password)
         let response = await AuthService.shared.signup(request: request)
         switch response {
         case .success(let response):
-            print(response)
+            if let token = response.token {
+                print("token: \(token)")
+                return token
+            }
         case .failure(let error):
-            print(error.localizedDescription)
+            errorMessage = error.localizedDescription
+            print("❌ Error: \(error.localizedDescription)")
         }
-        print("register response geldi")
+        return nil
     }
 }

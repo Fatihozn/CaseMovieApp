@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var sessionManager: UserSessionManager
     @StateObject private var viewModel = LoginViewModel()
-    
-    @State private var isPasswordVisible = false
     
     var body: some View {
         NavigationStack {
@@ -42,7 +41,9 @@ struct LoginView: View {
                     
                     Button(action: {
                         Task {
-                            await viewModel.login()
+                            if let token = await viewModel.login() {
+                                sessionManager.setToken(token)
+                            }
                         }
                     }) {
                         Text("Login")
@@ -55,8 +56,20 @@ struct LoginView: View {
                     .disabled(!viewModel.isFormValid)
                 }
                 .padding()
+                .alert(isPresented: Binding<Bool>(
+                    get: { viewModel.errorMessage != nil },
+                    set: { newValue in if !newValue { viewModel.errorMessage = nil } }
+                )) {
+                    Alert(
+                        title: Text("Hata"),
+                        message: Text(viewModel.errorMessage ?? "Bilinmeyen hata"),
+                        dismissButton: .default(Text("Tamam"))
+                    )
+                }
             }
         }
         
     }
 }
+
+#warning("buradaki alert test edilecek")

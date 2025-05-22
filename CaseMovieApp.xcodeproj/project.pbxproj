@@ -10,9 +10,22 @@
 		3D866ABE2DDDD6D400ADFE2D /* CaseMovieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaseMovieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3D6BE7742DDE5A58009B6061 /* Exceptions for "CaseMovieApp" folder in "CaseMovieApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resource/Info.plist,
+			);
+			target = 3D866ABD2DDDD6D400ADFE2D /* CaseMovieApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3D866AC02DDDD6D400ADFE2D /* CaseMovieApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3D6BE7742DDE5A58009B6061 /* Exceptions for "CaseMovieApp" folder in "CaseMovieApp" target */,
+			);
 			path = CaseMovieApp;
 			sourceTree = "<group>";
 		};

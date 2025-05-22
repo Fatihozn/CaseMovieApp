@@ -19,10 +19,8 @@ final class AuthService {
                 responseType: AuthResponse.self
             )
             
-            print("✅ Token: \(String(describing: response.token))")
             return .success(response)
         } catch {
-            print("❌ Error: \(error.localizedDescription)")
             return .failure(error)
         }
     }
@@ -36,10 +34,23 @@ final class AuthService {
                 responseType: AuthResponse.self
             )
             
-            print("✅ Token: \(String(describing: response.token))")
             return .success(response)
         } catch {
-            print("❌ Error: \(error.localizedDescription)")
+            return .failure(error)
+        }
+    }
+    
+    func getCurrentUser(token: String) async -> Result<CurrentUser, Error> {
+        do {
+            let response = try await NetworkManager.shared.createRequest(
+                with: .getCurrentUser,
+                method: .GET,
+                token: token,
+                responseType: CurrentUser.self
+            )
+            
+            return .success(response)
+        } catch {
             return .failure(error)
         }
     }
