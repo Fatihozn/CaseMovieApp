@@ -11,6 +11,16 @@ import SwiftUI
 final class MovieDetailViewModel: ObservableObject {
     @Published var isLikeMovie: Bool = false
     
+    func getLikedMovieIDs(id: Int, token: String) async {
+        let response = await MovieService.shared.fetchLikedMovieIDs(token: token)
+        switch response {
+        case .success(let likedMovieIDs):
+            isLikeMovie = likedMovieIDs.contains(id)
+        case .failure(let error):
+            print("❌ Error: \(error.localizedDescription)")
+        }
+    }
+    
     func likeMovie(id: Int, token: String) async {
         let response = await MovieService.shared.likeMovie(id: id, token: token)
         switch response {

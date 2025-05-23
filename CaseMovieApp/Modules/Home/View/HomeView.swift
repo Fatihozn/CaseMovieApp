@@ -14,23 +14,23 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.clrAppBackground.edgesIgnoringSafeArea(.all)
+            GeometryReader { geo in
+                let width = geo.size.width
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 24) {
                         
-                        // MARK: Liked Movies
+                        // MARK: Top 10 Movies
                         VStack(alignment: .leading) {
-                            Text("Liked")
+                            Text("TOP 10")
                                 .font(.headline)
                                 .padding(.horizontal)
-                                .foregroundStyle(Color.clrAccent)
+                                .foregroundStyle(Color.clrTextPrimary)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHGrid(rows: [GridItem(.fixed(150))], spacing: 12) {
-                                    ForEach(viewModel.likedMovies) { movie in
-                                        NavigationLink(destination: MovieDetailView(movie: movie, likedMovies: viewModel.likedIds)) {
-                                            MovieItemView(movie: movie, isFullWidth: false)
+                                LazyHGrid(rows: [GridItem(.flexible())], spacing: 12) {
+                                    ForEach(viewModel.topTenMovies) { movie in
+                                        NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                            MovieItemView(movie: movie)
                                         }
                                     }
                                 }
@@ -38,37 +38,29 @@ struct HomeView: View {
                             }
                         }
                         
-                        // MARK: Other Movies
+                        // MARK: All Movies
                         VStack(alignment: .leading) {
-                            Text("Other")
+                            Text("ALL MOVIES")
                                 .font(.headline)
                                 .padding(.horizontal)
-                                .foregroundStyle(Color.clrAccent)
+                                .foregroundStyle(Color.clrTextPrimary)
                             
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                                ForEach(viewModel.recommendedMovies) { movie in
-                                    NavigationLink(destination: MovieDetailView(movie: movie, likedMovies: viewModel.likedIds)) {
-                                        MovieItemView(movie: movie, isFullWidth: true)
+                                ForEach(viewModel.filteredMovies) { movie in
+                                    NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                        MovieItemView(movie: movie, width: (width - 36) / 2 )
                                     }
                                 }
                             }
                             .padding(.horizontal, 12)
                         }
                     }
-                    .padding(.top)
+                    .padding(.vertical)
                 }
+                .background(Image(.appBackground))
                 .navigationTitle("Home")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink {
-                            ProfileView()
-                        } label: {
-                            Image(systemName: "person")
-                                .font(.title2)
-                        }
-                    }
-                }
+                .searchable(text: $viewModel.searchText, prompt: "Search movies")
                 .task {
                     if let token = sessionManager.getToken() {
                         await viewModel.fetchMovies(token: token)

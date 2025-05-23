@@ -9,31 +9,40 @@ import SwiftUI
 
 @MainActor
 final class HomeViewModel: ObservableObject {
-    @Published var likedMovies: [Movie] = []
-    @Published var recommendedMovies: [Movie] = []
-    @Published var likedIds = Set<Int>()
+    @Published var allMovies: [Movie] = []
+    @Published var topTenMovies: [Movie] = []
+    @Published var searchText: String = ""
+    
+    var filteredMovies: [Movie] {
+        if searchText.isEmpty {
+            return allMovies
+        } else {
+            return allMovies.filter {
+                $0.title.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
     
     func fetchMovies(token: String) async {
-        await fetcLikedMovies(token: token)
-        likedIds = Set(likedMovies.map { $0.id })
         
         let response = await MovieService.shared.fetchMovies()
         switch response {
         case .success(let movies):
-            recommendedMovies = movies.filter { !likedIds.contains($0.id) }
+            allMovies = movies
+            topTenMovies = Array(movies.sorted { $0.rating > $1.rating }.prefix(10))
         case .failure(let error):
             print("❌ Error: \(error.localizedDescription)")
         }
     }
     
-    private func fetcLikedMovies(token: String) async {
-        let response = await MovieService.shared.fetchLikedMovies(token: token)
-        switch response {
-        case .success(let likedMovies):
-            self.likedMovies = likedMovies
-        case .failure(let error):
-            print("❌ Error: \(error.localizedDescription)")
-        }
-    }
+//    private func fetcLikedMovies(token: String) async {
+//        let response = await MovieService.shared.fetchLikedMovies(token: token)
+//        switch response {
+//        case .success(let likedMovies):
+//            self.likedMovies = likedMovies
+//        case .failure(let error):
+//            print("❌ Error: \(error.localizedDescription)")
+//        }
+//    }
     
 }

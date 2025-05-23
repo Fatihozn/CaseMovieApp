@@ -12,7 +12,6 @@ struct MovieDetailView: View {
     @StateObject private var viewModel = MovieDetailViewModel()
     
     let movie: Movie
-    let likedMovies: Set<Int>
     
     var body: some View {
         ZStack {
@@ -55,7 +54,6 @@ struct MovieDetailView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    
                     Text("👥 Actors:")
                         .font(.headline)
                         .foregroundColor(.clrTextPrimary)
@@ -81,7 +79,11 @@ struct MovieDetailView: View {
             .padding()
             .navigationTitle(movie.title)
             .onAppear {
-                viewModel.isLikeMovie = likedMovies.contains(movie.id)
+                Task {
+                    if let token = sessionManager.getToken() {
+                        await viewModel.getLikedMovieIDs(id: movie.id, token: token)
+                    }
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

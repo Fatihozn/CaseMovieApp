@@ -25,6 +25,20 @@ final class MovieService {
         }
     }
     
+    func fetchLikedMovieIDs(token: String) async -> Result<[Int], Error> {
+        do {
+            let likedMovieIDs = try await NetworkManager.shared.createRequest(
+                with: .getLikedMovieIDs,
+                method: .GET,
+                token: token,
+                responseType: [Int].self)
+            
+            return .success(likedMovieIDs)
+        } catch {
+            return .failure(error)
+        }
+    }
+    
     func fetchLikedMovies(token: String) async -> Result<[Movie], Error> {
         do {
             let likedMovies = try await NetworkManager.shared.createRequest(
