@@ -12,20 +12,22 @@ final class UserSessionManager: ObservableObject {
     
     @Published var currentUser: CurrentUserResponse?
     @Published var isLoggedIn: Bool = false
-
+    
     init() {
         Task {
             await checkSession()
         }
     }
-
+    
     func checkSession() async {
         guard let token else {
-            isLoggedIn = false
+            DispatchQueue.main.async {
+                self.isLoggedIn = false
+            }
             return
         }
         print("token: \(token)")
-
+        
         let result = await AuthService.shared.getCurrentUser(token: token)
         DispatchQueue.main.async {
             switch result {
@@ -38,13 +40,15 @@ final class UserSessionManager: ObservableObject {
             }
         }
     }
-
+    
     func logout() {
-        token = nil
-        currentUser = nil
-        isLoggedIn = false
+        DispatchQueue.main.async {
+            self.token = nil
+            self.currentUser = nil
+            self.isLoggedIn = false
+        }
     }
-
+    
     func setToken(_ newToken: String) {
         token = newToken
         Task {
@@ -54,6 +58,9 @@ final class UserSessionManager: ObservableObject {
     
     func getToken() -> String? {
         guard let token else {
+            if isLoggedIn {
+                ErrorManager.shared.showError("Please log in again.")
+            }
             return nil
         }
         return token

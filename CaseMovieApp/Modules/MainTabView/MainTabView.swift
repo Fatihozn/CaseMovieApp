@@ -38,6 +38,6 @@ struct MainTabView: View {
                 }
                 .tag(Tab.profile)
         }
-        .accentColor(.accentColor) // Tab icon rengi
+        .accentColor(.accentColor)
     }
 }

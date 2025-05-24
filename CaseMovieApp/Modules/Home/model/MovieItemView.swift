@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MovieItemView: View {
     let movie: Movie
@@ -13,35 +14,36 @@ struct MovieItemView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            AsyncImage(url: URL(string: movie.poster_url)) { phase in
-                switch phase {
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                default:
-                    Color.gray.opacity(0.3)
+            KFImage(URL(string: movie.poster_url))
+                .placeholder {
+                    ZStack {
+                        Color.gray.opacity(0.3)
+                        Image(systemName: "film")
+                            .resizable()
+                            .frame(width: 50, height: 60)
+                    }
                 }
-            }
-            .frame(
-                width: width,//isFullWidth ? (UIScreen.main.bounds.width - 48) / 2 : 120,
-                height: width * 1.5 //isFullWidth ? 260 : 180
-            )
-            .overlay(
-                VStack {
-                    HStack {
-                        Label(String(format: "%.1f", movie.rating), systemImage: "star.fill")
-                            .font(.caption2)
-                            .padding(6)
-                            .background(Color.black.opacity(0.7))
-                            .foregroundColor(.yellow)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
+                .resizable()
+                .scaledToFill()
+                .frame(
+                    width: width,
+                    height: width * 1.5
+                )
+                .overlay(
+                    VStack {
+                        HStack {
+                            Label(String(format: "%.1f", movie.rating), systemImage: "star.fill")
+                                .font(.caption2)
+                                .padding(6)
+                                .background(Color.black.opacity(0.7))
+                                .foregroundColor(.yellow)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                            
+                            Spacer()
+                        }
                         Spacer()
                     }
-                    Spacer()
-                }
-            )
+                )
             
             Text(movie.title)
                 .font(.caption)

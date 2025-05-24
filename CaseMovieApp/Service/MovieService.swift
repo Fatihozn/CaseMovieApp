@@ -14,10 +14,10 @@ final class MovieService {
     
     func fetchMovies() async -> Result<[Movie], Error> {
         do {
-            let movies = try await NetworkManager.shared.createRequest(
+            let movies: [Movie] = try await NetworkManager.shared.createRequest(
                 with: .getAllMovies,
-                method: .GET,
-                responseType: [Movie].self)
+                method: .GET
+            )
             
             return .success(movies)
         } catch {
@@ -27,11 +27,11 @@ final class MovieService {
     
     func fetchLikedMovieIDs(token: String) async -> Result<[Int], Error> {
         do {
-            let likedMovieIDs = try await NetworkManager.shared.createRequest(
+            let likedMovieIDs: [Int] = try await NetworkManager.shared.createRequest(
                 with: .getLikedMovieIDs,
                 method: .GET,
-                token: token,
-                responseType: [Int].self)
+                token: token
+            )
             
             return .success(likedMovieIDs)
         } catch {
@@ -41,11 +41,11 @@ final class MovieService {
     
     func fetchLikedMovies(token: String) async -> Result<[Movie], Error> {
         do {
-            let likedMovies = try await NetworkManager.shared.createRequest(
+            let likedMovies: [Movie] = try await NetworkManager.shared.createRequest(
                 with: .getLikedMovies,
                 method: .GET,
-                token: token,
-                responseType: [Movie].self)
+                token: token
+            )
             
             return .success(likedMovies)
         } catch {
@@ -55,11 +55,11 @@ final class MovieService {
     
     func likeMovie(id: Int, token: String) async -> Result<LikeUnLikeResponse, Error> {
         do {
-            let response = try await NetworkManager.shared.createRequest(
+            let response: LikeUnLikeResponse = try await NetworkManager.shared.createRequest(
                 with: .postLikeMovie(id: id),
                 method: .POST,
-                token: token,
-                responseType: LikeUnLikeResponse.self)
+                token: token
+            )
             
             return .success(response)
         } catch {
@@ -69,11 +69,11 @@ final class MovieService {
     
     func unLikeMovie(id: Int, token: String) async -> Result<LikeUnLikeResponse, Error> {
         do {
-            let response = try await NetworkManager.shared.createRequest(
+            let response: LikeUnLikeResponse = try await NetworkManager.shared.createRequest(
                 with: .postUnlikeMovie(id: id),
                 method: .POST,
-                token: token,
-                responseType: LikeUnLikeResponse.self)
+                token: token
+            )
             
             return .success(response)
         } catch {

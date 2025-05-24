@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MovieDetailView: View {
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -19,19 +20,20 @@ struct MovieDetailView: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(alignment: .top, spacing: 16) {
                     
-                    AsyncImage(url: URL(string: movie.poster_url)) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 225)
-                            .cornerRadius(12)
-                            .clipped()
-                    } placeholder: {
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(width: 150, height: 225)
-                            .cornerRadius(12)
-                    }
+                    KFImage(URL(string: movie.poster_url))
+                        .placeholder {
+                            ZStack {
+                                Color.gray.opacity(0.3)
+                                Image(systemName: "film")
+                                    .resizable()
+                                    .frame(width: 50, height: 60)
+                            }
+                        }
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 150, height: 225)
+                        .cornerRadius(12)
+                        .clipped()
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text(movie.title)

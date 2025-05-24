@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RooterView: View {
     @EnvironmentObject var sessionManager: UserSessionManager
+    @EnvironmentObject var errorManager: ErrorManager
     @State private var showSplash = true
     
     var body: some View {
@@ -26,10 +27,19 @@ struct RooterView: View {
             if showSplash {
                 Image(.splash)
             }
+            
+            if let message = errorManager.errorMessage {
+                CustomAlertView(
+                    message: message,
+                    dismissAction: {
+                        errorManager.clear()
+                    }
+                )
+            }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                withAnimation {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation(.easeInOut) {
                     showSplash = false
                 }
             }

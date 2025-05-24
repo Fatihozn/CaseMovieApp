@@ -13,7 +13,6 @@ final class SignUpViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var confirmPassword = ""
-    @Published var errorMessage: String?
 
     var isFormValid: Bool {
         !name.isEmpty &&
@@ -33,7 +32,7 @@ final class SignUpViewModel: ObservableObject {
                 return token
             }
         case .failure(let error):
-            errorMessage = error.localizedDescription
+            ErrorManager.shared.showError(error.localizedDescription)
             print("❌ Error: \(error.localizedDescription)")
         }
         return nil

@@ -14,12 +14,12 @@ final class UserService {
     
     func updateProfile(request: RegisterRequestBody, token: String) async -> Result<UpdateUserResponse, Error> {
         do {
-            let response = try await NetworkManager.shared.createRequest(
+            let response: UpdateUserResponse = try await NetworkManager.shared.createRequest(
                 with: .putUserProfile,
                 method: .PUT,
                 token: token,
-                body: request,
-                responseType: UpdateUserResponse.self)
+                body: request
+            )
             
             return .success(response)
         } catch {

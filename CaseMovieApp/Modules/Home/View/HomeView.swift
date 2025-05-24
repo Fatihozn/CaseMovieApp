@@ -62,8 +62,8 @@ struct HomeView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .searchable(text: $viewModel.searchText, prompt: "Search movies")
                 .task {
-                    if let token = sessionManager.getToken() {
-                        await viewModel.fetchMovies(token: token)
+                    if sessionManager.isLoggedIn {
+                        await viewModel.fetchMovies()
                     }
                 }
             }

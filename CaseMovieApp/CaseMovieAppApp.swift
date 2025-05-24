@@ -14,6 +14,7 @@ struct CaseMovieAppApp: App {
     var body: some Scene {
         WindowGroup {
             RooterView()
+                .environmentObject(ErrorManager.shared)
                 .environmentObject(sessionManager)
                 .accentColor(.clrAccent)
         }

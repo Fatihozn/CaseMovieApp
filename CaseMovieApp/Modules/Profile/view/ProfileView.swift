@@ -13,42 +13,52 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                
-                Form {
-                    Section(header: Text("Profile Info")) {
-                        ProfileTextField(title: "Name", isEditing: $viewModel.isEditing, text: $viewModel.name)
-                        ProfileTextField(title: "Surname", isEditing: $viewModel.isEditing, text: $viewModel.surname)
-                        ProfileTextField(title: "Email", isEditing: $viewModel.isEditing, text: $viewModel.email)
-                        ProfileTextField(title: "Password", isEditing: $viewModel.isEditing, text: $viewModel.password)
-                    }
-                }
-                .frame(height: 250)
-                .scrollDisabled(true)
-                .background(Color.clear)
-                .scrollContentBackground(.hidden)
-                
-                if viewModel.isEditing {
-                    Button {
-                        Task {
-                            if let token = sessionManager.getToken() {
-                                await viewModel.updateProfile(token: token)
-                                viewModel.isEditing = false
-                            }
+            ZStack(alignment: .bottom) {
+                VStack {
+                    
+                    Form {
+                        Section(header: Text("Profile Info")) {
+                            ProfileTextField(title: "Name", isEditing: $viewModel.isEditing, text: $viewModel.name)
+                            ProfileTextField(title: "Surname", isEditing: $viewModel.isEditing, text: $viewModel.surname)
+                            ProfileTextField(title: "Email", isEditing: $viewModel.isEditing, text: $viewModel.email)
+                            ProfileTextField(title: "Password", isEditing: $viewModel.isEditing, text: $viewModel.password)
                         }
-                    } label: {
-                        Text("Save")
-                            .foregroundColor(.clrTextPrimary)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(viewModel.isFormValid ? Color.clrAccent : .gray)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
                     }
-                    .disabled(!viewModel.isFormValid)
+                    .frame(height: 250)
+                    .scrollDisabled(true)
+                    .background(Color.clear)
+                    .scrollContentBackground(.hidden)
+                    
+                    if viewModel.isEditing {
+                        Button {
+                            Task {
+                                if let token = sessionManager.getToken() {
+                                    viewModel.isEditing = false
+                                    await viewModel.updateProfile(token: token)
+                                    await sessionManager.checkSession()
+                                }
+                            }
+                        } label: {
+                            Text("Save")
+                                .foregroundColor(.clrTextPrimary)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(viewModel.isFormValid ? Color.clrAccent : .gray)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        }
+                        .disabled(!viewModel.isFormValid)
+                    }
+                    
+                    Spacer()
                 }
                 
-                Spacer()
+                if viewModel.showSnackbar {
+                    SnackbarView(message: "Succeded")
+                        .animation(.easeInOut, value: viewModel.showSnackbar)
+                        .zIndex(1)
+                }
+                
             }
             .background(Color.clrAppBackground)
             .navigationTitle("Profile")
@@ -82,8 +92,11 @@ struct ProfileView: View {
                     viewModel.surname = currentUser.surname
                     viewModel.email = currentUser.email
                     viewModel.password = ""
+                } else {
+                    Task {
+                        await sessionManager.checkSession()
+                    }
                 }
-                
             }
         }
         

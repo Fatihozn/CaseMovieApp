@@ -17,6 +17,7 @@ final class ProfileViewModel: ObservableObject {
 
     @Published var isEditing: Bool = false
     @Published var showMenu: Bool = false
+    @Published var showSnackbar: Bool = false
     
     var isFormValid: Bool {
         !name.isEmpty &&
@@ -31,9 +32,19 @@ final class ProfileViewModel: ObservableObject {
         
         switch response {
         case .success(let updateResponse):
+            showSuccessSnackbar()
             print(updateResponse)
         case .failure(let error):
+            ErrorManager.shared.showError(error.localizedDescription)
             print(error.localizedDescription)
+        }
+    }
+    
+    private func showSuccessSnackbar() {
+        showSnackbar = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.showSnackbar = false
         }
     }
 }

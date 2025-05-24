@@ -11,7 +11,6 @@ import Foundation
 final class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
-    @Published var errorMessage: String?
 
     var isFormValid: Bool {
         !email.isEmpty &&
@@ -30,7 +29,7 @@ final class LoginViewModel: ObservableObject {
                 return token
             }
         case .failure(let error):
-            errorMessage = error.localizedDescription
+            ErrorManager.shared.showError(error.localizedDescription)
             print("❌ Error: \(error.localizedDescription)")
         }
         return nil

@@ -12,11 +12,10 @@ final class AuthService {
     
     func login(request: LoginRequestBody) async -> Result<AuthResponse, Error> {
         do {
-            let response = try await NetworkManager.shared.createRequest(
+            let response: AuthResponse = try await NetworkManager.shared.createRequest(
                 with: .postLogin,
                 method: .POST,
-                body: request,
-                responseType: AuthResponse.self
+                body: request
             )
             
             return .success(response)
@@ -27,11 +26,10 @@ final class AuthService {
     
     func signup(request: RegisterRequestBody) async -> Result<AuthResponse, Error> {
         do {
-            let response = try await NetworkManager.shared.createRequest(
+            let response: AuthResponse = try await NetworkManager.shared.createRequest(
                 with: .postRegister,
                 method: .POST,
-                body: request,
-                responseType: AuthResponse.self
+                body: request
             )
             
             return .success(response)
@@ -42,11 +40,10 @@ final class AuthService {
     
     func getCurrentUser(token: String) async -> Result<CurrentUserResponse, Error> {
         do {
-            let response = try await NetworkManager.shared.createRequest(
+            let response: CurrentUserResponse = try await NetworkManager.shared.createRequest(
                 with: .getCurrentUser,
                 method: .GET,
-                token: token,
-                responseType: CurrentUserResponse.self
+                token: token
             )
             
             return .success(response)
