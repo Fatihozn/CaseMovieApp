@@ -40,20 +40,24 @@ struct LoginView: View {
                     }
                     
                     Button(action: {
-                        Task {
-                            if let token = await viewModel.login() {
-                                sessionManager.setToken(token)
+                        if viewModel.isFormValid {
+                            Task {
+                                if let token = await viewModel.login() {
+                                    sessionManager.setToken(token)
+                                }
                             }
+                        } else {
+                            viewModel.showAlert()
                         }
+                        
                     }) {
                         Text("Login")
                             .foregroundColor(.white)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(viewModel.isFormValid ? Color.clrAccent : .gray)
+                            .background(Color.clrAccent)
                             .cornerRadius(10)
                     }
-                    .disabled(!viewModel.isFormValid)
                 }
                 .padding()
             }

@@ -30,6 +30,7 @@ struct RooterView: View {
             
             if let message = errorManager.errorMessage {
                 CustomAlertView(
+                    title: errorManager.errorTitle,
                     message: message,
                     dismissAction: {
                         errorManager.clear()

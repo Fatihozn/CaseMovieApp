@@ -42,20 +42,23 @@ struct SignUpView: View {
                     Spacer().frame(height: 32)
                     
                     Button(action: {
-                        Task {
-                            if let token = await viewModel.signUp() {
-                                sessionManager.setToken(token)
+                        if viewModel.isFormValid {
+                            Task {
+                                if let token = await viewModel.signUp() {
+                                    sessionManager.setToken(token)
+                                }
                             }
+                        } else {
+                            viewModel.showAlert()
                         }
                     }) {
                         Text("Sign Up")
                             .foregroundColor(.white)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(viewModel.isFormValid ? Color.clrAccent : Color.gray)
+                            .background(Color.clrAccent)
                             .cornerRadius(10)
                     }
-                    .disabled(!viewModel.isFormValid)
                 }
                 .padding()
             }

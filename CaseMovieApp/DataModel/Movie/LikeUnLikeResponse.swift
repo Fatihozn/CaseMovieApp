@@ -8,6 +8,5 @@
 import Foundation
 
 struct LikeUnLikeResponse: Codable {
-    var message: String
     var likedMovies: [Int]?
 }

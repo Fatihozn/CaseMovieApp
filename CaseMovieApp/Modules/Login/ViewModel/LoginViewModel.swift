@@ -15,7 +15,7 @@ final class LoginViewModel: ObservableObject {
     var isFormValid: Bool {
         !email.isEmpty &&
         !password.isEmpty &&
-        email.contains("@") &&
+        email.isValidEmail &&
         password.count >= 6
     }
 
@@ -33,5 +33,18 @@ final class LoginViewModel: ObservableObject {
             print("❌ Error: \(error.localizedDescription)")
         }
         return nil
+    }
+    
+    func showAlert() {
+        var message = ""
+        if email.isEmpty || password.isEmpty {
+            message = "Please fill all fields."
+        } else if !email.isValidEmail {
+            message = "Please fill valid email."
+        } else {
+            message = "Password must be at least 6 characters long."
+        }
+        
+        ErrorManager.shared.showError(title: "Info", message)
     }
 }

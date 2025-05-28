@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct CustomAlertView: View {
-    let title: String = "Error"
+    let title: String
     let message: String
     let buttonTitle: String = "OK"
     var dismissAction: (() -> Void)? = nil

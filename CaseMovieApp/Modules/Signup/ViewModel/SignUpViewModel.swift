@@ -17,7 +17,7 @@ final class SignUpViewModel: ObservableObject {
     var isFormValid: Bool {
         !name.isEmpty &&
         !surname.isEmpty &&
-        email.contains("@") &&
+        email.isValidEmail &&
         password.count >= 6 &&
         password == confirmPassword
     }
@@ -36,5 +36,20 @@ final class SignUpViewModel: ObservableObject {
             print("❌ Error: \(error.localizedDescription)")
         }
         return nil
+    }
+    
+    func showAlert() {
+        var message = ""
+        if name.isEmpty || surname.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty {
+            message = "Please fill all fields."
+        } else if !email.isValidEmail {
+            message = "Please fill valid email."
+        } else if password.count < 6 {
+            message = "Password must be at least 6 characters long."
+        } else {
+            message = "Passwords do not match."
+        }
+        
+        ErrorManager.shared.showError(title: "Info", message)
     }
 }

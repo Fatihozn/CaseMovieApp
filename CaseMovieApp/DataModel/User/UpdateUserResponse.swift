@@ -8,6 +8,5 @@
 import Foundation
 
 struct UpdateUserResponse: Codable {
-    var message: String
     var user: UserResponse?
 }

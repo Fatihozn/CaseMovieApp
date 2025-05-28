@@ -21,7 +21,7 @@ struct ProfileView: View {
                             ProfileTextField(title: "Name", isEditing: $viewModel.isEditing, text: $viewModel.name)
                             ProfileTextField(title: "Surname", isEditing: $viewModel.isEditing, text: $viewModel.surname)
                             ProfileTextField(title: "Email", isEditing: $viewModel.isEditing, text: $viewModel.email)
-                            ProfileTextField(title: "Password", isEditing: $viewModel.isEditing, text: $viewModel.password)
+                            ProfileTextField(title: "Password", isSecure: true, isEditing: $viewModel.isEditing, text: $viewModel.password)
                         }
                     }
                     .frame(height: 250)
@@ -68,6 +68,7 @@ struct ProfileView: View {
                     if viewModel.isEditing {
                         Button {
                             viewModel.isEditing = false
+                            viewModel.password = ""
                         } label: {
                             Image(systemName: "xmark")
                         }
